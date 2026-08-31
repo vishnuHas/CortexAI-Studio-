@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CortexAI Studio — Multi-Tier Engineering Platform</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Marked Markdown Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    :root {
+      --bg-cream: #FAF7F2;
+      --bg-cream-card: #F4EFE6;
+      --bg-white: #FFFFFF;
+      --card-border: #E8E2D6;
+      --card-border-subtle: #F0EBE1;
+
+      --key-blue: #2563EB;
+      --key-blue-hover: #1D4ED8;
+      --key-blue-light: #EFF6FF;
+      --key-blue-border: #BFDBFE;
+      --key-navy: #0F172A;
+      --navy-slate: #1E293B;
+      
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --text-light: #64748B;
+      
+      --accent-green: #10B981;
+      --accent-green-bg: #ECFDF5;
+      --accent-amber: #F59E0B;
+      --accent-amber-bg: #FFFBEB;
+      --accent-rose: #F43F5E;
+      
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 10px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
+      --shadow-xl: 0 20px 30px -10px rgba(15, 23, 42, 0.1);
+
+      --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* Navbar - Spacious & Premium */
+    .navbar {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+      height: 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, var(--key-blue), #1D4ED8);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 22px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: var(--key-navy);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .brand-text span {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: block;
+      white-space: nowrap;
+    }
+
+    /* Navigation Tabs - Clean, Breathable, No Wrapping */
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      background: var(--bg-cream-card);
+      padding: 5px 6px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .nav-tab-btn {
+      border: none;
+      background: transparent;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .nav-tab-btn:hover {
+      color: var(--key-navy);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .nav-tab-btn.active {
+      background: var(--bg-white);
+      color: var(--key-blue);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-tab-btn .badge {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--key-blue-light);
+      color: var(--key-blue);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    /* Controls */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .btn-secondary {
+      background: var(--bg-white);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--key-blue);
+      color: var(--key-blue);
+      background: var(--key-blue-light);
+    }
+
+    .btn-primary {
+      background: var(--key-blue);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--key-blue-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 32px 0 64px 0;
+    }
+
+    .section-banner {
+      background: linear-gradient(135deg, #FFFFFF 60%, var(--key-blue-light));
+      border: 1px solid var(--key-blue-border);
+      border-radius: 16px;
+      padding: 24px 32px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-banner h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--key-navy);
+      margin-bottom: 4px;
+    }
+
+    .section-banner p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-white);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border-subtle);
+    }
+
+    .card-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--key-navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* Sub Tabs */
+    .sub-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--card-border-subtle);
+      margin-bottom: 24px;
+      gap: 8px;
+    }
+
+    .sub-tab-btn {
+      background: none;
+      border: none;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sub-tab-btn:hover {
+      color: var(--key-blue);
+    }
+
+    .sub-tab-btn.active {
+      color: var(--key-blue);
+      border-bottom-color: var(--key-blue);
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .form-control, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      background: #FAFAFA;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--key-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      background: #FFFFFF;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* Pill Badges */
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-blue {
+      background: var(--key-blue-light);
+      color: var(--key-blue);
+    }
+
+    .badge-green {
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+    }
+
+    .badge-amber {
+      background: var(--accent-amber-bg);
+      color: var(--accent-amber);
+    }
+
+    /* Quiz Cards */
+    .quiz-card {
+      background: var(--bg-white);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 12px 16px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: var(--bg-white);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-option:hover {
+      background: var(--key-blue-light);
+      border-color: var(--key-blue-border);
+    }
+
+    .quiz-option.selected-correct {
+      background: #ECFDF5 !important;
+      border-color: #10B981 !important;
+      color: #065F46;
+      font-weight: 600;
+    }
+
+    .quiz-option.selected-wrong {
+      background: #FFF1F2 !important;
+      border-color: #F43F5E !important;
+      color: #9F1239;
+      font-weight: 600;
+    }
+
+    .flashcard-box {
+      background: linear-gradient(135deg, #FFFFFF, var(--bg-cream-card));
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .flashcard-term {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--key-navy);
+      margin-bottom: 8px;
+    }
+
+    .flashcard-def {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Dropzone */
+    .dropzone {
+      border: 2px dashed var(--key-blue-border);
+      background: var(--key-blue-light);
+      border-radius: 14px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--key-blue);
+      background: #E0E7FF;
+    }
+
+    .dropzone-icon {
+      font-size: 32px;
+      color: var(--key-blue);
+      margin-bottom: 8px;
+    }
+
+    .chunk-item {
+      background: var(--bg-cream);
+      border-left: 4px solid var(--key-blue);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+    }
+
+    .chunk-meta {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      color: var(--key-navy);
+      margin-bottom: 6px;
+      font-size: 0.75rem;
+    }
+
+    .output-box {
+      background: var(--bg-white);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .output-box h3, .output-box h4 {
+      color: var(--key-navy);
+      margin: 14px 0 6px 0;
+    }
+
+    .output-box ul, .output-box ol {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    /* Timeline */
+    .timeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--card-border-subtle);
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--key-blue);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-info {
+      flex-grow: 1;
+    }
+
+    .step-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--key-navy);
+    }
+
+    .step-latency {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--key-blue);
+      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--bg-white);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 540px;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--card-border);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      background: var(--bg-cream-card);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--key-navy);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .footer {
+      background: var(--bg-white);
+      border-top: 1px solid var(--card-border);
+      padding: 28px 0;
+      margin-top: 60px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .nav-tabs {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="brand" onclick="switchMainTab('level1')">
+        <div class="brand-icon">
+          <i data-lucide="brain-circuit"></i>
+        </div>
+        <div class="brand-text">
+          <h1>CortexAI Studio</h1>
+          <span>Multi-Tier Engineering Suite</span>
+        </div>
+      </a>
+
+      <div class="nav-tabs">
+        <button class="nav-tab-btn active" id="tab-btn-level1" onclick="switchMainTab('level1')">
+          <i data-lucide="graduation-cap"></i>
+          <span>Level 1</span>
+          <span class="badge">Beginner</span>
+        </button>
+        <button class="nav-tab-btn" id="tab-btn-level2" onclick="switchMainTab('level2')">
+          <i data-lucide="file-search"></i>
+          <span>Level 2</span>
+          <span class="badge">Intermediate</span>
+        </button>
+        <button class="nav-tab-btn" id="tab-btn-level3" onclick="switchMainTab('level3')">
+          <i data-lucide="cpu"></i>
+          <span>Level 3</span>
+          <span class="badge">Advanced RAG</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container main-content">
+
+    <!-- LEVEL 1: STUDENT UTILITY APP -->
+    <section id="section-level1" class="tab-pane active">
+      <div class="section-banner">
+        <div>
+          <h2>Level 1: AI-Powered Student Utility App</h2>
+          <p>Multi-purpose academic suite featuring smart note summarization, interactive MCQ quiz generation, concept deconstruction, and rubric coaching.</p>
+        </div>
+        <div>
+          <span class="badge-pill badge-blue"><i data-lucide="zap"></i> Structured Prompts</span>
+          <span class="badge-pill badge-green"><i data-lucide="shield-check"></i> Input Validation</span>
+        </div>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-tab-btn active" id="l1-tab-btn-summarize" onclick="switchLevel1SubTab('summarize')">
+          <i data-lucide="file-text"></i> Smart Note Summarizer
+        </button>
+        <button class="sub-tab-btn" id="l1-tab-btn-quiz" onclick="switchLevel1SubTab('quiz')">
+          <i data-lucide="help-circle"></i> Quiz & Flashcards Generator
+        </button>
+        <button class="sub-tab-btn" id="l1-tab-btn-explain" onclick="switchLevel1SubTab('explain')">
+          <i data-lucide="lightbulb"></i> Concept Explainer (Feynman/ELI5)
+        </button>
+        <button class="sub-tab-btn" id="l1-tab-btn-improve" onclick="switchLevel1SubTab('improve')">
+          <i data-lucide="sparkles"></i> Answer Improver & Rubric Coach
+        </button>
+      </div>
+
+      <!-- 1. Summarizer -->
+      <div id="l1-pane-summarize" class="l1-subpane">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="edit-3"></i> Input Study Material</h3>
+              <button class="btn-secondary" onclick="loadSampleSummarizeText()" style="padding: 4px 10px; font-size: 0.75rem;">Load Sample Notes</button>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lecture Notes or Source Text:</label>
+              <textarea id="l1-sum-input" class="form-textarea" rows="8" placeholder="Paste notes, textbook sections, or research papers..."></textarea>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Summary Format:</label>
+                <select id="l1-sum-style" class="form-select">
+                  <option value="bullet_points">Structured Bullet Points</option>
+                  <option value="executive">Executive Synthesis</option>
+                  <option value="exam_cram">Exam-Cram Cheat Sheet</option>
+                  <option value="key_formulas">Key Definitions & Terms</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Target Audience:</label>
+                <select id="l1-sum-audience" class="form-select">
+                  <option value="undergraduate">Undergraduate Student</option>
+                  <option value="high_school">High School Student</option>
+                  <option value="researcher">Advanced Researcher</option>
+                </select>
+              </div>
+            </div>
+            <button id="l1-sum-btn" class="btn-primary" onclick="handleSummarizeNotes()" style="width: 100%; justify-content: center;">
+              <i data-lucide="play"></i> Generate Structured Summary
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="check-circle-2"></i> Structured Output</h3>
+              <div id="l1-sum-metrics" style="font-size: 0.75rem; color: var(--text-muted);"></div>
+            </div>
+            <div id="l1-sum-output" class="output-box" style="min-height: 280px; max-height: 480px; overflow-y: auto;">
+              <p style="color: var(--text-light); text-align: center; margin-top: 60px;">Summarized output with markdown formatting will appear here.</p>
+            </div>
+            <div id="l1-sum-prompt-collapse" style="margin-top: 14px; display: none;">
+              <details style="background: var(--bg-cream); padding: 10px; border-radius: 8px; font-size: 0.8rem;">
+                <summary style="cursor: pointer; font-weight: 600; color: var(--key-blue);">Inspect Prompt Template</summary>
+                <pre id="l1-sum-prompt-text" style="white-space: pre-wrap; font-family: var(--font-mono); margin-top: 8px; font-size: 0.75rem; color: var(--text-muted);"></pre>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Quiz Generator -->
+      <div id="l1-pane-quiz" class="l1-subpane" style="display: none;">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="file-question"></i> Study Material Ingestion</h3>
+              <button class="btn-secondary" onclick="loadSampleQuizText()" style="padding: 4px 10px; font-size: 0.75rem;">Load AI Engineering Text</button>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subject Material:</label>
+              <textarea id="l1-quiz-input" class="form-textarea" rows="7" placeholder="Paste study text for dynamic quiz generation..."></textarea>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Difficulty:</label>
+                <select id="l1-quiz-diff" class="form-select">
+                  <option value="easy">Easy (Foundational)</option>
+                  <option value="medium" selected>Medium (Standard Exam)</option>
+                  <option value="hard">Hard (Conceptual Mastery)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Number of Questions:</label>
+                <select id="l1-quiz-num" class="form-select">
+                  <option value="3">3 Questions</option>
+                  <option value="4" selected>4 Questions</option>
+                  <option value="6">6 Questions</option>
+                </select>
+              </div>
+            </div>
+            <button id="l1-quiz-btn" class="btn-primary" onclick="handleGenerateQuiz()" style="width: 100%; justify-content: center;">
+              <i data-lucide="sparkles"></i> Generate Interactive Quiz & Flashcards
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="award"></i> Interactive Assessment</h3>
+              <span id="l1-quiz-score-badge" class="badge-pill badge-blue" style="display:none;">Score: 0 / 0</span>
+            </div>
+            <div id="l1-quiz-output" style="max-height: 480px; overflow-y: auto; padding-right: 4px;">
+              <p style="color: var(--text-light); text-align: center; margin-top: 60px;">Your interactive MCQs with real-time scoring and explanations will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Concept Explainer -->
+      <div id="l1-pane-explain" class="l1-subpane" style="display: none;">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="help-circle"></i> Concept Exploration</h3>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Concept or Algorithm:</label>
+              <input type="text" id="l1-exp-concept" class="form-control" placeholder="e.g. Cosine Similarity in High-Dimensional Vector Spaces">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pedagogical Depth:</label>
+              <select id="l1-exp-depth" class="form-select">
+                <option value="feynman" selected>The Feynman Technique (Intuitive & Deep)</option>
+                <option value="eli5">Explain Like I'm 5 (Everyday Metaphors)</option>
+                <option value="high_school">High School Standard</option>
+                <option value="academic">Rigorous Academic & Mathematical</option>
+              </select>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                <input type="checkbox" id="l1-exp-analogy" checked> Include Real-World Analogy
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; margin-top: 6px;">
+                <input type="checkbox" id="l1-exp-check" checked> Include Practice Assessment Question
+              </label>
+            </div>
+            <button id="l1-exp-btn" class="btn-primary" onclick="handleExplainConcept()" style="width: 100%; justify-content: center;">
+              <i data-lucide="zap"></i> Generate Pedagogical Breakdown
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="book-open"></i> Conceptual Blueprint</h3>
+            </div>
+            <div id="l1-exp-output" class="output-box" style="min-height: 280px; max-height: 480px; overflow-y: auto;">
+              <p style="color: var(--text-light); text-align: center; margin-top: 60px;">Concept breakdown and interactive self-check will be synthesized here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Answer Improver -->
+      <div id="l1-pane-improve" class="l1-subpane" style="display: none;">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="file-check"></i> Student Draft Submission</h3>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Exam Question Prompt:</label>
+              <input type="text" id="l1-imp-question" class="form-control" placeholder="e.g. What is the role of chunking in vector-based RAG?">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Student's Initial Draft Answer:</label>
+              <textarea id="l1-imp-draft" class="form-textarea" rows="6" placeholder="e.g. Chunking cuts big documents into small pieces so the computer can search words faster."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Evaluation Rubric Focus:</label>
+              <select id="l1-imp-rubric" class="form-select">
+                <option value="rigor_and_clarity">Academic Rigor & Clarity</option>
+                <option value="brevity">High-Impact Brevity</option>
+                <option value="academic_depth">Advanced Technical Formulation</option>
+              </select>
+            </div>
+            <button id="l1-imp-btn" class="btn-primary" onclick="handleImproveAnswer()" style="width: 100%; justify-content: center;">
+              <i data-lucide="award"></i> Polish Answer & Generate Rubric Feedback
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="trending-up"></i> Enhanced Model Answer & Rubric</h3>
+            </div>
+            <div id="l1-imp-output" class="output-box" style="min-height: 280px; max-height: 480px; overflow-y: auto;">
+              <p style="color: var(--text-light); text-align: center; margin-top: 60px;">Enhanced answer version and diagnostic score report will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 2: DOCUMENT Q&A ASSISTANT -->
+    <section id="section-level2" class="tab-pane" style="display: none;">
+      <div class="section-banner">
+        <div>
+          <h2>Level 2: Document-Based Q&A Assistant</h2>
+          <p>Ingest PDF/TXT documents, construct sliding-window chunks, compute hybrid similarity vectors, and answer queries grounded strictly in retrieved context.</p>
+        </div>
+        <div>
+          <span class="badge-pill badge-blue"><i data-lucide="layers"></i> Recursive Chunking</span>
+          <span class="badge-pill badge-green"><i data-lucide="check-check"></i> Zero Ungrounded Guessing</span>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <h3><i data-lucide="upload-cloud"></i> Document Ingestion (PDF / TXT)</h3>
+              <span id="l2-doc-status-badge" class="badge-pill badge-amber">Sample Preloaded</span>
+            </div>
+            
+            <div id="l2-dropzone" class="dropzone" onclick="document.getElementById('l2-file-input').click()">
+              <input type="file" id="l2-file-input" style="display: none;" accept=".pdf,.txt,.md" onchange="handleL2FileUpload(event)">
+              <div class="dropzone-icon"><i data-lucide="file-up"></i></div>
+              <p style="font-weight: 600; color: var(--key-navy);">Click to upload or drag & drop</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">PDF, Markdown, or Plain Text documents</p>
+            </div>
+
+            <div id="l2-doc-meta" style="margin-top: 14px; font-size: 0.85rem; color: var(--text-muted);">
+              Active Document: <strong id="l2-active-doc-name" style="color: var(--key-blue);">AI_Architecture_Handbook.pdf</strong>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="split"></i> Indexed Chunks Inspection</h3>
+              <span id="l2-chunk-count-badge" class="badge-pill badge-blue">Chunks: 3</span>
+            </div>
+            <div id="l2-chunk-inspector" style="max-height: 280px; overflow-y: auto;">
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Sample architecture chunks preloaded.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3><i data-lucide="message-square"></i> Grounded Q&A Console</h3>
+            <span class="badge-pill badge-green"><i data-lucide="shield"></i> Anti-Hallucination Active</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ask a question grounded in the document:</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="l2-query-input" class="form-control" placeholder="e.g. What are the 5 stages of the RAG pipeline?">
+              <button id="l2-query-btn" class="btn-primary" onclick="handleL2Query()">
+                <i data-lucide="send"></i> Ask
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+            <button class="btn-secondary" style="font-size: 0.75rem; padding: 4px 8px;" onclick="setL2Query('What are the stages of the multi-stage agentic workflow?')">Preset: RAG Workflow</button>
+            <button class="btn-secondary" style="font-size: 0.75rem; padding: 4px 8px;" onclick="setL2Query('Why is hierarchical chunking with overlap used?')">Preset: Chunking</button>
+            <button class="btn-secondary" style="font-size: 0.75rem; padding: 4px 8px;" onclick="setL2Query('What do hallucination guardrails compute?')">Preset: Guardrails</button>
+          </div>
+
+          <div class="card-header" style="margin-top: 10px; margin-bottom: 10px;">
+            <h4>Grounded Synthesis</h4>
+            <span id="l2-confidence-badge" class="badge-pill badge-blue" style="display: none;">Confidence: 94%</span>
+          </div>
+          <div id="l2-answer-box" class="output-box" style="min-height: 180px; max-height: 260px; overflow-y: auto;">
+            <p style="color: var(--text-light); text-align: center; margin-top: 40px;">Grounded answers with strict source verification will appear here.</p>
+          </div>
+
+          <div class="card-header" style="margin-top: 16px; margin-bottom: 10px;">
+            <h4>Retrieved Source Excerpts</h4>
+          </div>
+          <div id="l2-matched-chunks-box" style="max-height: 180px; overflow-y: auto;">
+            <p style="font-size: 0.8rem; color: var(--text-light); text-align: center;">Retrieved chunks will be displayed here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 3: PRODUCTION RAG ASSISTANT -->
+    <section id="section-level3" class="tab-pane" style="display: none;">
+      <div class="section-banner">
+        <div>
+          <h2>Level 3: Production-Style Agentic RAG Assistant</h2>
+          <p>Multi-step LangGraph-style workflow: Query Rewriting $\to$ Dense Vector Retrieval $\to$ Cross-Attention Reranker $\to$ Grounded LLM Generation $\to$ Faithfulness Verification.</p>
+        </div>
+        <div>
+          <span class="badge-pill badge-blue"><i data-lucide="activity"></i> Full Observability</span>
+          <span class="badge-pill badge-green"><i data-lucide="container"></i> Dockerized FastAPI</span>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <h3><i data-lucide="sliders"></i> Agentic Workflow Configuration</h3>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Enterprise or Student Query:</label>
+              <textarea id="l3-query-input" class="form-textarea" rows="3" placeholder="e.g. How does the system prevent hallucinations and ensure high faithfulness in production?"></textarea>
+            </div>
+            
+            <div class="grid-3" style="margin-bottom: 16px;">
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem;">
+                <input type="checkbox" id="l3-opt-rewrite" checked> Query Rewriting
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem;">
+                <input type="checkbox" id="l3-opt-rerank" checked> Reranking Heuristic
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem;">
+                <input type="checkbox" id="l3-opt-guard" checked> Guardrail Audit
+              </label>
+            </div>
+
+            <button id="l3-exec-btn" class="btn-primary" onclick="handleExecuteProductionRag()" style="width: 100%; justify-content: center;">
+              <i data-lucide="play-circle"></i> Execute Production RAG Pipeline
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="check-check"></i> Synthesized Grounded Response</h3>
+              <div id="l3-scores-bar" style="display: flex; gap: 6px;"></div>
+            </div>
+            <div id="l3-answer-box" class="output-box" style="min-height: 240px; max-height: 380px; overflow-y: auto;">
+              <p style="color: var(--text-light); text-align: center; margin-top: 50px;">Run the pipeline to observe grounded generation with verified inline citations.</p>
+            </div>
+            <div id="l3-citations-list" style="margin-top: 14px;"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3><i data-lucide="activity"></i> Observability Timeline & Latency</h3>
+            <span id="l3-total-time-badge" class="badge-pill badge-blue">Ready</span>
+          </div>
+
+          <div id="l3-timeline-box" style="margin-bottom: 20px;">
+            <div class="timeline-step">
+              <div class="step-num">1</div>
+              <div class="step-info">
+                <div class="step-title">Query Rewriter & Semantic Expander</div>
+                <div class="step-latency">Ready for execution</div>
+              </div>
+            </div>
+            <div class="timeline-step">
+              <div class="step-num">2</div>
+              <div class="step-info">
+                <div class="step-title">Vector Similarity Retrieval (Top-K)</div>
+                <div class="step-latency">Ready for execution</div>
+              </div>
+            </div>
+            <div class="timeline-step">
+              <div class="step-num">3</div>
+              <div class="step-info">
+                <div class="step-title">Context Reranker & Noise Pruning</div>
+                <div class="step-latency">Ready for execution</div>
+              </div>
+            </div>
+            <div class="timeline-step">
+              <div class="step-num">4</div>
+              <div class="step-info">
+                <div class="step-title">Grounded Synthesis with NVIDIA NIM LLM</div>
+                <div class="step-latency">Ready for execution</div>
+              </div>
+            </div>
+            <div class="timeline-step">
+              <div class="step-num">5</div>
+              <div class="step-info">
+                <div class="step-title">Faithfulness & Entailment Guardrail</div>
+                <div class="step-latency">Ready for execution</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-header">
+            <h4><i data-lucide="table"></i> Reranked Chunk Score Matrix</h4>
+          </div>
+          <div id="l3-chunks-matrix" style="max-height: 240px; overflow-y: auto;">
+            <p style="font-size: 0.8rem; color: var(--text-light); text-align: center;">Matrix will populate upon pipeline execution.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- NVIDIA NIM Modal -->
+  <div id="apiKeyModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 8px; font-size: 1.1rem; color: var(--key-navy);">
+          <i data-lucide="key" style="color: var(--key-blue);"></i> NVIDIA NIM API Configuration
+        </h3>
+        <button onclick="closeApiKeyModal()" style="border: none; background: none; cursor: pointer; font-size: 1.2rem; color: var(--text-muted);">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
+          Configure your NVIDIA NIM API key (e.g. <code>nvapi-...</code>). You can also run the full suite in <strong>Offline Mock Engine Mode</strong> without entering a key!
+        </p>
+        <div class="form-group">
+          <label class="form-label">NVIDIA API Key:</label>
+          <input type="password" id="modal-api-key-input" class="form-control" placeholder="nvapi-xxxxxxxxxxxxxxxxxxxxxxxx">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Active Model:</label>
+          <select id="modal-model-select" class="form-select">
+            <option value="deepseek-ai/deepseek-v4-flash-0731" selected>deepseek-ai/deepseek-v4-flash-0731 (Active)</option>
+            <option value="meta/llama-3.3-70b-instruct">meta/llama-3.3-70b-instruct</option>
+            <option value="mistralai/mistral-large-2-instruct">mistralai/mistral-large-2-instruct</option>
+            <option value="nvidia/llama-3.1-nemotron-70b-instruct">nvidia/llama-3.1-nemotron-70b-instruct</option>
+          </select>
+        </div>
+        <div style="background: var(--bg-cream); padding: 12px; border-radius: 8px; font-size: 0.8rem; color: var(--text-muted);">
+          <i data-lucide="info" style="display: inline-block; width: 14px; height: 14px; vertical-align: middle;"></i>
+          The key is stored securely in your local browser session and passed directly to your FastAPI backend.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeApiKeyModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveApiKeyConfig()">
+          <i data-lucide="save"></i> Save Configuration
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>CortexAI Studio &bull; Multi-Tier AI Engineering Platform &bull; Built with FastAPI, Pydantic v2, and NVIDIA NIM</p>
+    </div>
+  </footer>
+
+  <!-- Embedded Client Logic -->
+  <script src="js/app.js"></script>
+  <script src="js/level1.js"></script>
+  <script src="js/level2.js"></script>
+  <script src="js/level3.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
