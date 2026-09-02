@@ -6,7 +6,7 @@ const APP_STATE = {
   activeTab: 'level1',
   activeL1SubTab: 'summarize',
   apiKey: localStorage.getItem('cortex_nvidia_key') || '',
-  modelName: localStorage.getItem('cortex_model_name') || 'meta/llama-3.1-8b-instruct',
+  modelName: localStorage.getItem('cortex_model_name') || 'meta/llama-3.2-11b-vision-instruct',
   apiBase: window.location.origin.includes('8000') || window.location.origin.includes('localhost')
     ? `${window.location.origin}/api`
     : 'http://localhost:8000/api',

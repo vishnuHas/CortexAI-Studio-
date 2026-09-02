@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -89,6 +89,10 @@ if os.path.exists(frontend_dir):
     if os.path.exists(css_dir):
         app.mount("/css", StaticFiles(directory=css_dir), name="css")
     app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+
+    @app.get("/favicon.ico")
+    async def favicon():
+        return Response(status_code=204)
 
     @app.get("/")
     async def serve_index():

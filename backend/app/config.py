@@ -12,8 +12,8 @@ class Settings(BaseModel):
     # NVIDIA NIM Configuration
     NVIDIA_API_KEY: str = os.getenv("NVIDIA_API_KEY", "")
     NVIDIA_BASE_URL: str = os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1")
-    DEFAULT_CHAT_MODEL: str = os.getenv("DEFAULT_CHAT_MODEL", "meta/llama-3.1-8b-instruct")
-    DEFAULT_FAST_MODEL: str = os.getenv("DEFAULT_FAST_MODEL", "meta/llama-3.1-8b-instruct")
+    DEFAULT_CHAT_MODEL: str = os.getenv("DEFAULT_CHAT_MODEL", "meta/llama-3.2-11b-vision-instruct")
+    DEFAULT_FAST_MODEL: str = os.getenv("DEFAULT_FAST_MODEL", "meta/llama-3.2-11b-vision-instruct")
     DEFAULT_EMBED_MODEL: str = os.getenv("DEFAULT_EMBED_MODEL", "nvidia/nv-embedqa-e5-v5")
 
     # Document & RAG Defaults
