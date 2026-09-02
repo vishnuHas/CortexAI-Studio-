@@ -46,7 +46,7 @@ Requirements:
             {"role": "user", "content": prompt}
         ]
 
-        result = await nvidia_client.generate_completion(messages, api_key=request.api_key)
+        result = await nvidia_client.generate_completion(messages, api_key=request.api_key, max_tokens=700)
         elapsed_ms = (time.time() - start_time) * 1000
 
         return StudentUtilityResponse(
@@ -97,7 +97,7 @@ CRITICAL: Return ONLY a valid, parseable JSON object with this exact structure:
             {"role": "user", "content": prompt}
         ]
 
-        raw_output = await nvidia_client.generate_completion(messages, api_key=request.api_key)
+        raw_output = await nvidia_client.generate_completion(messages, api_key=request.api_key, max_tokens=850)
         
         # Parse JSON
         parsed_data = None
@@ -175,7 +175,7 @@ Structure your response with:
             {"role": "user", "content": prompt}
         ]
 
-        result = await nvidia_client.generate_completion(messages, api_key=request.api_key)
+        result = await nvidia_client.generate_completion(messages, api_key=request.api_key, max_tokens=650)
         elapsed_ms = (time.time() - start_time) * 1000
 
         return StudentUtilityResponse(
@@ -212,7 +212,7 @@ Please provide:
             {"role": "user", "content": prompt}
         ]
 
-        result = await nvidia_client.generate_completion(messages, api_key=request.api_key)
+        result = await nvidia_client.generate_completion(messages, api_key=request.api_key, max_tokens=700)
         elapsed_ms = (time.time() - start_time) * 1000
 
         return StudentUtilityResponse(

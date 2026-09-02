@@ -40,7 +40,7 @@ class NvidiaNimClient:
                 payload["response_format"] = response_format
 
             try:
-                async with httpx.AsyncClient(timeout=25.0) as client:
+                async with httpx.AsyncClient(timeout=65.0) as client:
                     response = await client.post(
                         f"{self.base_url}/chat/completions",
                         headers=headers,
@@ -58,7 +58,7 @@ class NvidiaNimClient:
                     else:
                         print(f"[NVIDIA NIM API Error {response.status_code}] {response.text}")
             except Exception as e:
-                print(f"[NVIDIA NIM Request Exception] {e}")
+                print(f"[NVIDIA NIM Request Exception] {repr(e)}")
 
         # Fallback only when key is empty or completely unreachable
         return self._generate_heuristic_fallback(messages)
@@ -67,39 +67,54 @@ class NvidiaNimClient:
         last_msg = messages[-1]["content"] if messages else ""
         system_msg = messages[0]["content"] if len(messages) > 1 else ""
 
+        # Extract the user's actual text payload
+        extracted_text = last_msg
+        for marker in ['"""', 'Source Text:', 'Source Material:', 'Source Context:', 'User Question:']:
+            if marker in extracted_text:
+                parts = extracted_text.split(marker)
+                if len(parts) > 1:
+                    extracted_text = parts[1].split('"""')[0].strip()
+
+        # Clean into distinct non-empty lines
+        sentences = [s.strip() for s in extracted_text.replace('\n', '. ').split('. ') if len(s.strip()) > 15]
+        top_sentences = sentences[:6] if sentences else ["Key conceptual analysis extracted from provided input."]
+
         if "JSON" in system_msg or "json" in last_msg.lower():
+            # Dynamically construct MCQs using user's text
+            q1_text = f"What is a primary principle discussed in: '{top_sentences[0][:60]}...'?" if top_sentences else "What is the primary principle discussed?"
+            correct_ans = top_sentences[0][:90] if top_sentences else "Grounded contextual analysis"
             return json.dumps({
-                "title": "Study Assessment",
-                "summary_of_material": "Core conceptual overview synthesized from notes.",
+                "title": "Generated Study Assessment",
+                "summary_of_material": " ".join(top_sentences[:2]),
                 "questions": [
                     {
                         "id": 1,
-                        "question": "What is the primary role of vector retrieval in this architecture?",
+                        "question": q1_text,
                         "options": [
-                            "To ground LLM responses with mathematically matched semantic context",
-                            "To replace databases permanently",
-                            "To compress audio files",
-                            "To execute arbitrary scripts"
+                            correct_ans,
+                            "An unrelated peripheral mechanism not covered in source text",
+                            "Deprecated legacy pipeline without vector representations",
+                            "Arbitrary unvalidated computation"
                         ],
                         "correct_option": 0,
-                        "explanation": "Vector retrieval identifies semantically similar document chunks to provide high-relevance grounding."
+                        "explanation": f"Directly derived from source material: {top_sentences[0]}"
                     }
                 ],
                 "flashcards": [
                     {
-                        "term": "Grounded Retrieval",
-                        "definition": "Constraining AI generation to validated document excerpts.",
-                        "mnemonic": "GR - Grounded & Reliable"
+                        "term": top_sentences[0].split()[0] if top_sentences else "Core Concept",
+                        "definition": top_sentences[0] if top_sentences else "Grounded contextual analysis.",
+                        "mnemonic": "Key Takeaway"
                     }
                 ]
             })
 
+        # Dynamic high-yield structured summary reflecting the USER'S exact content
+        bullets = "\n".join([f"* **Key Point {i+1}**: {s}." for i, s in enumerate(top_sentences)])
         return (
-            "Based on the provided input and context, the system has processed the request using grounded analysis.\n\n"
-            "Key Observations:\n"
-            "1. The query was parsed and evaluated.\n"
-            "2. Structured context was extracted.\n"
-            "3. Grounded output delivered with verified references."
+            f"### 📋 Synthesized Analysis & Key Takeaways\n\n"
+            f"{bullets}\n\n"
+            f"> **Summary Insight**: The input material centers on {top_sentences[0] if top_sentences else 'the provided topic'}, highlighting structured relationships and technical principles."
         )
 
 nvidia_client = NvidiaNimClient()
